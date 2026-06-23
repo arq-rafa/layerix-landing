@@ -288,8 +288,13 @@
 
     /* ===== PLANS ===== */
     .plans-grid {
-      display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:20px; max-width:1100px; margin:0 auto;
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+      gap:20px; max-width:1200px; margin:0 auto;
+    }
+    .plans-note {
+      text-align:center; margin-top:28px;
+      font-size:12px; color:rgba(255,255,255,0.3);
+      font-family:'DM Mono',monospace; line-height:1.8;
     }
     .plan-card {
       background:var(--card); border:1px solid var(--border);
@@ -499,7 +504,10 @@
     <h2 class="section-title">Así se ve Layerix</h2>
     <p class="section-sub" style="margin:0 auto">Una interfaz oscura, limpia y profesional. Diseñada para trabajar horas sin cansarte.</p>
   </div>
-  <div class="app-mockup">
+  <div style="max-width:900px;margin:0 auto;border-radius:16px;overflow:hidden;">
+  <iframe src="/onboarding.html" style="width:900px;height:520px;border:none;display:block;"></iframe>
+</div>
+  <div class="app-mockup" style="display:none;">
     <div class="mockup-bar">
       <div class="mockup-dots"><span/><span/><span/></div>
       <div class="mockup-url">layerix.com.ar/app</div>
@@ -587,14 +595,28 @@
     <!-- FREE -->
     <div class="plan-card">
       <div class="plan-name">Free</div>
-      <div class="plan-price">USD 0<span>/mes</span></div>
+      <div class="plan-price">Gratis</div>
       <div class="plan-desc">Para empezar y probar la plataforma sin compromiso.</div>
       <ul class="plan-features">
         <li>1 proyecto activo</li>
         <li>Gestión hasta nivel de presupuesto</li>
-        <li>Exportación PDF del proyecto activo</li>
+        <li>Exportación PDF y Excel del proyecto activo</li>
       </ul>
       <a href="https://app.layerix.com.ar" class="plan-btn outline">Empezar gratis</a>
+    </div>
+
+    <!-- FLEX -->
+    <div class="plan-card">
+      <div class="plan-name" style="color:rgba(56,217,255,0.7)">Flex</div>
+      <div class="plan-price">USD 9<span>/mes</span></div>
+      <div class="plan-desc">Para proyectos puntuales. Activá cuando tenés obra, pausá cuando no.</div>
+      <ul class="plan-features">
+        <li>Hasta 3 proyectos activos</li>
+        <li>Exportaciones ilimitadas (PDF y Excel)</li>
+        <li>Logo de empresa en documentos</li>
+        <li>Posibilidad de comprar créditos IA adicionales</li>
+      </ul>
+      <a href="https://app.layerix.com.ar" class="plan-btn outline" style="border-color:rgba(56,217,255,0.3);color:rgba(56,217,255,0.85)">Activar Flex</a>
     </div>
 
     <!-- PRO -->
@@ -622,8 +644,8 @@
       <div class="plan-desc">Para estudios que quieren automatizar el cómputo con inteligencia artificial.</div>
       <ul class="plan-features">
         <li>Todo lo incluido en el plan Pro</li>
-        <li>Hasta 30 proyectos activos</li>
-        <li>20 créditos de cómputo automático por IA/mes</li>
+        <li>Hasta 20 proyectos activos</li>
+        <li>20 créditos de cómputo automático por IA/mes <a href="#que-es-credito" style="color:#38d9ff;font-size:11px;">¿Qué es un crédito?</a></li>
         <li>Posibilidad de comprar créditos IA adicionales</li>
       </ul>
       <a href="https://app.layerix.com.ar" class="plan-btn outline">Activar IA</a>
@@ -637,11 +659,48 @@
       <ul class="plan-features">
         <li>Disponible para planes Pro e IA</li>
         <li>10 créditos adicionales de cómputo por IA</li>
-        <li>Sin vencimiento dentro del mes en curso</li>
+        <li>Créditos acumulables, no vencen</li>
       </ul>
       <a href="https://app.layerix.com.ar" class="plan-btn outline" style="border-color:rgba(167,139,250,0.3);color:rgba(167,139,250,0.9)">Comprar créditos</a>
     </div>
 
+  </div>
+
+  <div class="plans-note">
+    Precio de referencia en USD. El cobro se realiza en pesos argentinos al tipo de cambio vigente al momento del pago.<br/>
+    Sin permanencia. Podés cambiar de plan o cancelarlo cuando quieras.
+  </div>
+
+</section>
+
+</section>
+
+<!-- QUÉ ES UN CRÉDITO -->
+<section style="max-width:760px;margin:0 auto;padding:60px 24px;" id="que-es-credito">
+  <h2 style="color:#fff;font-size:22px;margin-bottom:8px;">¿Qué es un crédito IA?</h2>
+  <p style="color:#aaa;margin-bottom:24px;">1 crédito = 1 plano de planta o nivel subido para análisis automático (PDF/DWG/DXF, máximo hoja A0 o 500 m²).</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div style="background:#111318;border:1px solid #1e2330;border-radius:12px;padding:20px;">
+      <div style="color:#38d9ff;font-weight:700;margin-bottom:8px;">🏨 Hotel de 8 pisos</div>
+      <ul style="color:#ccc;font-size:14px;padding-left:18px;line-height:2;">
+        <li>Subsuelo = 1 crédito</li>
+        <li>Planta Baja = 1 crédito</li>
+        <li>Entrepiso 1 = 1 crédito</li>
+        <li>Entrepiso 2 = 1 crédito</li>
+        <li>Planta Tipo = 1 crédito</li>
+        <li>Planta Suites = 1 crédito</li>
+        <li>Terraza = 1 crédito</li>
+      </ul>
+      <div style="color:#38d9ff;font-weight:700;margin-top:12px;">Total: 7 créditos</div>
+    </div>
+    <div style="background:#111318;border:1px solid #1e2330;border-radius:12px;padding:20px;">
+      <div style="color:#38d9ff;font-weight:700;margin-bottom:8px;">🏠 Vivienda unifamiliar</div>
+      <ul style="color:#ccc;font-size:14px;padding-left:18px;line-height:2;">
+        <li>Planta Baja = 1 crédito</li>
+        <li>Planta Alta = 1 crédito</li>
+      </ul>
+      <div style="color:#38d9ff;font-weight:700;margin-top:12px;">Total: 2 créditos</div>
+    </div>
   </div>
 </section>
 
@@ -651,7 +710,7 @@
   <p>Creá tu cuenta gratis en menos de 2 minutos.<br/>Sin tarjeta de crédito, sin instalación.</p>
   <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
     <a href="https://app.layerix.com.ar" class="btn-primary">Crear cuenta gratis →</a>
-    <a href="https://wa.me/5493884000000" class="btn-secondary">💬 Contactar por WhatsApp</a>
+    <a href="https://wa.me/5493884143442" class="btn-secondary">💬 Contactar por WhatsApp</a>
   </div>
 </section>
 
