@@ -497,6 +497,48 @@
   </div>
 </section>
 
+<!-- MODAL DEMO -->
+<div id="demo-modal" style="
+  display:none; position:fixed; inset:0; z-index:1000;
+  background:rgba(0,0,0,0.92); backdrop-filter:blur(8px);
+  align-items:center; justify-content:center;
+">
+  <button onclick="closeDemoModal()" style="
+    position:absolute; top:20px; right:28px;
+    background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15);
+    color:white; font-size:20px; width:44px; height:44px;
+    border-radius:50%; cursor:pointer; line-height:1;
+    transition:background .2s;
+  " onmouseover="this.style.background='rgba(255,255,255,0.16)'"
+     onmouseout="this.style.background='rgba(255,255,255,0.08)'">✕</button>
+  <iframe id="demo-iframe" src="" style="
+    width:min(1200px,96vw); height:90vh;
+    border:none; border-radius:16px;
+    box-shadow:0 40px 120px rgba(0,0,0,0.8);
+  "></iframe>
+</div>
+
+<script>
+function openDemoModal(){
+  const m=document.getElementById('demo-modal');
+  document.getElementById('demo-iframe').src='/onboarding.html';
+  m.style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function closeDemoModal(){
+  const m=document.getElementById('demo-modal');
+  m.style.display='none';
+  document.getElementById('demo-iframe').src='';
+  document.body.style.overflow='';
+}
+document.getElementById('demo-modal').addEventListener('click',function(e){
+  if(e.target===this) closeDemoModal();
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape') closeDemoModal();
+});
+</script>
+
 <!-- APP PREVIEW -->
 <section class="preview-section">
   <div style="text-align:center;margin-bottom:48px;">
@@ -504,10 +546,30 @@
     <h2 class="section-title">Así se ve Layerix</h2>
     <p class="section-sub" style="margin:0 auto">Una interfaz oscura, limpia y profesional. Diseñada para trabajar horas sin cansarte.</p>
   </div>
-  <div style="max-width:900px;margin:0 auto;border-radius:16px;overflow:hidden;">
-  <iframe src="/onboarding.html" style="width:900px;height:520px;border:none;display:block;"></iframe>
-</div>
-  <div class="app-mockup" style="display:none;">
+
+  <!-- Mockup estático + botón demo -->
+  <div style="max-width:900px;margin:0 auto;position:relative;">
+    <!-- Botón demo superpuesto -->
+    <div style="
+      position:absolute; inset:0; z-index:10;
+      display:flex; align-items:center; justify-content:center;
+      background:rgba(10,12,16,0.45); border-radius:16px;
+      opacity:0; transition:opacity .25s;
+    " onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0'">
+      <button onclick="openDemoModal()" style="
+        background:#1d4ed8; color:white; border:none;
+        padding:16px 36px; border-radius:12px;
+        font-size:16px; font-weight:700; cursor:pointer;
+        display:flex; align-items:center; gap:10px;
+        box-shadow:0 0 40px rgba(29,78,216,0.5);
+        transition:background .2s;
+      " onmouseover="this.style.background='#2563eb'"
+         onmouseout="this.style.background='#1d4ed8'">
+        ▶ Ver demo interactiva
+      </button>
+    </div>
+    <!-- Botón siempre visible debajo del mockup -->
+  <div class="app-mockup">
     <div class="mockup-bar">
       <div class="mockup-dots"><span/><span/><span/></div>
       <div class="mockup-url">layerix.com.ar/app</div>
@@ -580,7 +642,24 @@
         </div>
       </div>
     </div>
+  </div><!-- fin app-mockup -->
+  </div><!-- fin wrapper relativo -->
+
+  <!-- Botón siempre visible -->
+  <div style="text-align:center;margin-top:32px;">
+    <button onclick="openDemoModal()" style="
+      background:transparent; color:#38d9ff;
+      border:1px solid rgba(56,217,255,0.35);
+      padding:13px 32px; border-radius:10px;
+      font-size:15px; font-weight:700; cursor:pointer;
+      display:inline-flex; align-items:center; gap:9px;
+      transition:all .2s; font-family:'Syne',sans-serif;
+    " onmouseover="this.style.background='rgba(56,217,255,0.08)';this.style.borderColor='rgba(56,217,255,0.6)'"
+       onmouseout="this.style.background='transparent';this.style.borderColor='rgba(56,217,255,0.35)'">
+      ▶ Ver demo interactiva completa
+    </button>
   </div>
+
 </section>
 
 <!-- PLANES -->
