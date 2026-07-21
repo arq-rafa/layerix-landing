@@ -6,6 +6,14 @@
   <title>Layerix — Gestión inteligente de obras</title>
   <meta name="description" content="Del plano al certificado de obra. Cómputos, presupuestos, planificación y certificación en una sola plataforma."/>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L0MYQPGM4C"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-L0MYQPGM4C');
+  </script>
   <style>
     :root {
       --cyan: #38d9ff;
@@ -681,7 +689,7 @@ document.addEventListener('keydown',function(e){
         <li>Gestión hasta nivel de presupuesto</li>
         <li>Exportación PDF y Excel del proyecto activo</li>
       </ul>
-      <a href="https://app.layerix.com.ar" class="plan-btn outline">Empezar gratis</a>
+      <a href="https://app.layerix.com.ar" class="plan-btn outline" onclick="gtag('event','click_empezar_gratis',{plan:'free'})">Empezar gratis</a>
     </div>
 
     <!-- FLEX -->
@@ -695,7 +703,7 @@ document.addEventListener('keydown',function(e){
         <li>Logo de empresa en documentos</li>
         <li>Posibilidad de comprar créditos IA adicionales</li>
       </ul>
-      <a href="https://app.layerix.com.ar" class="plan-btn outline" style="border-color:rgba(56,217,255,0.3);color:rgba(56,217,255,0.85)">Activar Flex</a>
+      <a href="https://app.layerix.com.ar" class="plan-btn outline" style="border-color:rgba(56,217,255,0.3);color:rgba(56,217,255,0.85)" onclick="gtag('event','click_seleccionar_plan',{plan:'flex'})">Activar Flex</a>
     </div>
 
     <!-- PRO -->
@@ -713,7 +721,7 @@ document.addEventListener('keydown',function(e){
         <li>1 crédito de IA incluido por mes</li>
         <li>Posibilidad de comprar créditos IA adicionales</li>
       </ul>
-      <a href="https://app.layerix.com.ar" class="plan-btn filled">Activar Pro</a>
+      <a href="https://app.layerix.com.ar" class="plan-btn filled" onclick="gtag('event','click_activar_pro',{plan:'pro'})">Activar Pro</a>
     </div>
 
     <!-- IA -->
@@ -727,7 +735,7 @@ document.addEventListener('keydown',function(e){
         <li>20 créditos de cómputo automático por IA/mes <a href="#que-es-credito" style="color:#38d9ff;font-size:11px;">¿Qué es un crédito?</a></li>
         <li>Posibilidad de comprar créditos IA adicionales</li>
       </ul>
-      <a href="https://app.layerix.com.ar" class="plan-btn outline">Activar IA</a>
+      <a href="https://app.layerix.com.ar" class="plan-btn outline" onclick="gtag('event','click_activar_ia',{plan:'ia'})">Activar IA</a>
     </div>
 
     <!-- CRÉDITOS EXTRA -->
@@ -740,7 +748,7 @@ document.addEventListener('keydown',function(e){
         <li>10 créditos adicionales de cómputo por IA</li>
         <li>Créditos acumulables, no vencen</li>
       </ul>
-      <a href="https://app.layerix.com.ar" class="plan-btn outline" style="border-color:rgba(167,139,250,0.3);color:rgba(167,139,250,0.9)">Comprar créditos</a>
+      <a href="https://app.layerix.com.ar" class="plan-btn outline" style="border-color:rgba(167,139,250,0.3);color:rgba(167,139,250,0.9)" onclick="gtag('event','click_comprar_creditos',{plan:'creditos_extra'})">Comprar créditos</a>
     </div>
 
   </div>
@@ -788,7 +796,7 @@ document.addEventListener('keydown',function(e){
   <h2>¿Listo para empezar?</h2>
   <p>Creá tu cuenta gratis en menos de 2 minutos.<br/>Sin tarjeta de crédito, sin instalación.</p>
   <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
-    <a href="https://app.layerix.com.ar" class="btn-primary">Crear cuenta gratis →</a>
+    <a href="https://app.layerix.com.ar" class="btn-primary" onclick="gtag('event','click_empezar_gratis',{plan:'free',ubicacion:'cta_final'})">Crear cuenta gratis →</a>
     <a href="https://wa.me/5493884143442" class="btn-secondary">💬 Contactar por WhatsApp</a>
   </div>
 </section>
