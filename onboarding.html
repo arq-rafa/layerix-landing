@@ -149,7 +149,8 @@ html,body { width:100%; height:100%; overflow:hidden; background:var(--bg); colo
   border-radius:var(--r2); padding:16px 20px;
   box-shadow:0 0 24px rgba(56,139,253,.12), inset 0 0 24px rgba(56,139,253,.04);
 }
-.lx-callout-icon { font-size:20px; margin-top:1px; flex-shrink:0; }
+.lx-callout-icon { flex-shrink:0; color:#38d9ff; display:flex; }
+.lx-callout-icon svg { width:20px; height:20px; margin-top:1px; }
 .lx-callout-val  { font-size:22px; font-weight:700; color:var(--t1); }
 .lx-callout-lbl  { font-size:12px; color:var(--t3); margin-bottom:4px; }
 .lx-callout-sub  { font-size:12px; color:var(--t2); margin-top:3px; }
@@ -379,9 +380,10 @@ html,body { width:100%; height:100%; overflow:hidden; background:var(--bg); colo
   width:56px; height:56px; border-radius:14px;
   background:var(--s1); border:1px solid var(--b1);
   display:flex; align-items:center; justify-content:center;
-  font-size:24px;
+  color:#38d9ff;
   transition:all .4s cubic-bezier(.4,0,.2,1);
 }
+.lx-ff-icon svg { width:24px; height:24px; }
 .lx-ff-step.lit .lx-ff-icon {
   background:rgba(56,139,253,.16); border-color:rgba(56,139,253,.6);
   box-shadow:0 0 24px rgba(56,139,253,.25);
@@ -414,7 +416,8 @@ html,body { width:100%; height:100%; overflow:hidden; background:var(--bg); colo
   cursor:none; transition:border-color .2s, transform .2s, box-shadow .2s;
 }
 .lx-mod:hover { border-color:rgba(56,139,253,.5); transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,.3); }
-.lx-mod-ic { font-size:22px; }
+.lx-mod-ic { color:#38d9ff; display:flex; }
+.lx-mod-ic svg { width:22px; height:22px; }
 .lx-mod-lbl { font-size:11px; color:var(--t3); font-weight:500; }
 
 /* ── BG EFFECTS ─────────────────────────────────────────── */
@@ -457,6 +460,7 @@ html,body { width:100%; height:100%; overflow:hidden; background:var(--bg); colo
   .lx-layout-hero .lx-title{font-size:clamp(42px,9vw,72px);}
 }
 </style>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body>
 
@@ -584,7 +588,12 @@ let FLOW_LABELS = [];
 const LAYERIX_TOUR = {
   id: 'layerix-main',
   title: 'Layerix — Del plano al certificado',
-  flow: ['📐 Medición','📊 Cómputo','💰 Presupuesto','📄 Certificación'],
+  flow: [
+    { ic:'ruler', lbl:'Medición' },
+    { ic:'calculator', lbl:'Cómputo' },
+    { ic:'wallet', lbl:'Presupuesto' },
+    { ic:'file-check-2', lbl:'Certificación' },
+  ],
   scenes: [
 
     /* ── SCENE 0: PORTADA ─────────────────────────────── */
@@ -601,11 +610,11 @@ const LAYERIX_TOUR = {
           { label:'Ver cómo funciona →', cls:'lx-pill-blue', action:'next' },
         ],
         modules: [
-          { ic:'📐', lbl:'Cómputo' },
-          { ic:'💰', lbl:'Presupuesto' },
-          { ic:'📅', lbl:'Cronograma' },
-          { ic:'📄', lbl:'Certificación' },
-          { ic:'👥', lbl:'Colaboración' },
+          { ic:'<i data-lucide="ruler"></i>', lbl:'Cómputo' },
+          { ic:'<i data-lucide="wallet"></i>', lbl:'Presupuesto' },
+          { ic:'<i data-lucide="calendar"></i>', lbl:'Cronograma' },
+          { ic:'<i data-lucide="file-check-2"></i>', lbl:'Certificación' },
+          { ic:'<i data-lucide="users"></i>', lbl:'Colaboración' },
         ],
       },
       screen: null,
@@ -624,7 +633,7 @@ const LAYERIX_TOUR = {
         eyebrow: 'Paso 1 · Medición',
         title:   'MEDÍS <hl>UNA VEZ.</hl>',
         sub:     'Subís el plano. Trazás un polígono sobre el ambiente. Cuatro clics. El área aparece sola — con su rubro y su unidad.',
-        callout: { icon:'📐', label:'Área detectada · automático', val:'28,40 m²', sub:'Mampostería lad/común s/c 20cm' },
+        callout: { icon:'<i data-lucide="ruler"></i>', label:'Área detectada · automático', val:'28,40 m²', sub:'Mampostería lad/común s/c 20cm' },
         checks: [
           'Calibración sobre el plano real',
           'Rubros FAU-UNT 2012 · 265 ítems',
@@ -635,7 +644,7 @@ const LAYERIX_TOUR = {
         img:  'medicion',
         zoom: 'zoom',
         spotlight: { top:'12%', left:'33%', w:'64%', h:'56%' },
-        tooltip:   { text:'✦  28,40 m² capturado al instante', top:'9%', left:'34%' },
+        tooltip:   { text:'<i data-lucide="sparkles" width="12" height="12" style="vertical-align:-1px"></i>  28,40 m² capturado al instante', top:'9%', left:'34%' },
         dash:      { top:'50%', left:'95%', w:0 },
       },
       cursor: {
@@ -666,7 +675,7 @@ const LAYERIX_TOUR = {
           'Línea (ml) — cordones, cañerías',
           'Conteo (u) — puertas, artefactos',
         ],
-        callout: { icon:'📏', label:'Medición múltiple activa', val:'3 capas', sub:'Revestimientos · Revoques · activas' },
+        callout: { icon:'<i data-lucide="ruler"></i>', label:'Medición múltiple activa', val:'3 capas', sub:'Revestimientos · Revoques · activas' },
       },
       screen: {
         img:  'medicion2',
@@ -690,7 +699,7 @@ const LAYERIX_TOUR = {
         eyebrow: 'Paso 2 · Cómputo',
         title:   'EL CÓMPUTO<br><hl>APARECE SOLO.</hl>',
         sub:     'La medición viaja al cómputo. Con su rubro, con su unidad, con su cantidad. Lista. Sin que hagas nada.',
-        callout: { icon:'📊', label:'Transferido automáticamente', val:'24,69 M2', sub:'Mampostería lad/común s/c 20cm' },
+        callout: { icon:'<i data-lucide="calculator"></i>', label:'Transferido automáticamente', val:'24,69 M2', sub:'Mampostería lad/común s/c 20cm' },
         checks: [
           '8 rubros · 22 mediciones activas',
           'Deducción de aberturas automática',
@@ -721,8 +730,8 @@ const LAYERIX_TOUR = {
         sub:     'Precios sugeridos actualizados para el mercado argentino — o los tuyos. El sistema multiplica por las cantidades que midiste.',
         stat:    { label:'Total general · julio 2026', val:'$357.856.128', sub:'8 ítems · IVA + IIBB incluidos', color:'blue', countTo: 357856128 },
         pills: [
-          { label:'📊 Excel', cls:'lx-pill-green', action:'none' },
-          { label:'📄 PDF',   cls:'lx-pill-red',   action:'none' },
+          { label:'<i data-lucide="file-spreadsheet" width="14" height="14" style="vertical-align:-3px"></i> Excel', cls:'lx-pill-green', action:'none' },
+          { label:'<i data-lucide="file-text" width="14" height="14" style="vertical-align:-3px"></i> PDF',   cls:'lx-pill-red',   action:'none' },
         ],
       },
       screen: {
@@ -1052,9 +1061,9 @@ const LX = (() => {
     steps.forEach((s,i)=>{
       const step = el('div','lx-ff-step');
       step.id    = `ff-step-${i}`;
-      const icon = el('div','lx-ff-icon', s.split(' ')[0]);
+      const icon = el('div','lx-ff-icon', `<i data-lucide="${s.ic}"></i>`);
       const chk  = el('div','lx-ff-check','✓');
-      const nm   = el('div','lx-ff-name', s.slice(s.indexOf(' ')+1));
+      const nm   = el('div','lx-ff-name', s.lbl);
       step.append(icon,chk,nm);
       fflow.appendChild(step);
       if(i<steps.length-1){
@@ -1128,7 +1137,7 @@ const LX = (() => {
   function buildFlowbar(steps) {
     flowbar.innerHTML='';
     steps.forEach((s,i)=>{
-      const fs=el('div','lx-fs',s);
+      const fs=el('div','lx-fs',`<i data-lucide="${s.ic}" width="13" height="13" style="vertical-align:-2px"></i> ${s.lbl}`);
       fs.id=`lx-fs-${i}`;
       flowbar.appendChild(fs);
       if(i<steps.length-1){
@@ -1148,7 +1157,7 @@ const LX = (() => {
       const fc=document.getElementById(`lx-fcon-${i}`);
       if(!fs)return;
       fs.className='lx-fs';
-      if(i<step)  { fs.classList.add('done'); fs.textContent='✓ '+steps[i].slice(steps[i].indexOf(' ')+1); }
+      if(i<step)  { fs.classList.add('done'); fs.textContent='✓ '+steps[i].lbl; }
       if(i===step){ fs.classList.add('active'); }
       if(fc){
         fc.classList.toggle('flowing', i<step||(i===step));
@@ -1406,6 +1415,7 @@ const LX = (() => {
       // Build chrome
       buildFlowbar(t.flow);
       buildDots(scenes.length);
+      lucide.createIcons();
 
       // Activate first
       const first=document.getElementById(`lx-scene-${scenes[0].id}`);
