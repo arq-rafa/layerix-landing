@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Presupuesto rápido de tu vivienda | Layerix</title>
+  <meta name="description" content="Estimá cuánto sale construir tu vivienda en menos de un minuto. Solo superficie y tipología — sin subir plano. Gestión de obras Layerix."/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L0MYQPGM4C"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-L0MYQPGM4C', { page_path: '/presupuesto-rapido' });
+
+    // Mismo patrón que el resto del sitio: dispara el evento y recién
+    // después navega, para no perderlo por el corte de <a href>.
+    function trackAndGo(event, url, params) {
+      var navegado = false;
+      function ir() {
+        if (navegado) return;
+        navegado = true;
+        window.location.href = url;
+      }
+      gtag('event', event, Object.assign({}, params, {
+        event_callback: ir,
+        event_timeout: 300
+      }));
+      setTimeout(ir, 300); // red lenta o bloqueador de anuncios: navega igual
+    }
+  </script>
+
+  <style>
+    :root {
+      --cyan: #38d9ff;
+      --blue: #1d4ed8;
+      --bg: #0a0c10;
+      --card: #111318;
+      --border: #1e2330;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+    }
+
+    /* ===== NAV (minimal — reemplazar por el include real del sitio si aplica) ===== */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(10,12,16,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo svg { filter: drop-shadow(0 0 6px rgba(56,217,255,0.7)); }
+    .nav-logo-text { font-size: 20px; font-weight: 800; letter-spacing: 3px; color: #fff; }
+    .nav-cta {
+      background: var(--blue); color: #fff; padding: 9px 22px;
+      border-radius: 8px; font-size: 14px; font-weight: 700;
+      text-decoration: none; transition: background .2s; border: none; cursor: pointer;
+      font-family: 'Syne', sans-serif;
+    }
+    .nav-cta:hover { background: #2563eb; }
+
+    /* ===== CALCULADORA ===== */
+    .pr-wrap { position: relative; overflow: hidden; }
+    .pr-glow {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse at 75% 5%, rgba(29,78,216,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 10% 25%, rgba(56,217,255,0.08) 0%, transparent 45%);
+    }
+    .pr-grid {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: radial-gradient(circle, rgba(56,217,255,0.15) 1px, transparent 1px);
+      background-size: 32px 32px;
+      -webkit-mask-image: radial-gradient(ellipse at 30% 10%, black 0%, transparent 60%);
+      mask-image: radial-gradient(ellipse at 30% 10%, black 0%, transparent 60%);
+    }
+    .pr-content {
+      position: relative; z-index: 2;
+      padding: 56px 48px 96px;
+      max-width: 1360px; margin: 0 auto;
+      display: flex; flex-direction: column; gap: 32px;
+    }
+    .pr-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(56,217,255,0.08); border: 1px solid rgba(56,217,255,0.2);
+      border-radius: 20px; padding: 6px 14px; width: fit-content;
+      font-family: 'DM Mono', monospace; font-size: 11px; color: var(--cyan);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .pr-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: pr-pulse 2s ease-in-out infinite; }
+    @keyframes pr-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .pr-h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; letter-spacing: -1px; line-height: 1.1; }
+    .pr-h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--cyan), #60a5fa);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .pr-sub { font-size: 16px; color: rgba(255,255,255,0.55); max-width: 560px; line-height: 1.6; }
+
+    .pr-layout { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+
+    .pr-panel {
+      width: 340px; flex-shrink: 0;
+      display: flex; flex-direction: column; gap: 24px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px;
+    }
+    .pr-label {
+      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.4);
+    }
+    .pr-tipo-btn {
+      width: 100%; text-align: left; padding: 14px 16px; border-radius: 10px;
+      font-size: 15px; font-weight: 700; display: flex; justify-content: space-between; align-items: center;
+      background: var(--blue); color: #fff; border: none; font-family: 'Syne', sans-serif;
+    }
+    .pr-tipo-btn[disabled] {
+      background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+      color: rgba(255,255,255,0.35); font-weight: 600; cursor: not-allowed;
+    }
+    .pr-soon {
+      font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500;
+      background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4);
+      padding: 3px 8px; border-radius: 100px;
+    }
+    .pr-hr { height: 1px; background: var(--border); }
+    .pr-input-wrap { position: relative; }
+    #m2input {
+      width: 100%; padding: 14px 52px 14px 16px; border-radius: 10px;
+      border: 1px solid var(--border); font-size: 22px; font-weight: 700; color: #fff;
+      background: rgba(255,255,255,0.04); font-family: 'Syne', sans-serif;
+    }
+    #m2input:focus { outline: 2px solid var(--cyan); outline-offset: 1px; }
+    .pr-unit { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 15px; color: rgba(255,255,255,0.4); font-weight: 600; }
+    .pr-tramo-box {
+      display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 12px;
+      background: rgba(56,217,255,0.06); border: 1px solid rgba(56,217,255,0.15);
+    }
+    .pr-tramo-lbl { font-family: 'DM Mono', monospace; font-size: 10.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--cyan); }
+    .pr-tramo-val { font-size: 19px; font-weight: 800; }
+    .pr-tramo-rango { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+    .pr-note { font-size: 12px; color: rgba(255,255,255,0.3); line-height: 1.55; }
+
+    .pr-results { flex-grow: 1; min-width: 320px; display: flex; flex-direction: column; gap: 20px; }
+    .pr-total-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 32px 36px;
+      display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap;
+    }
+    .pr-total-val {
+      font-size: 46px; font-weight: 800; letter-spacing: -1px; margin-top: 8px;
+      background: linear-gradient(135deg, var(--cyan), #60a5fa);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .pr-ancla-val { font-size: 21px; font-weight: 700; color: #fff; margin-top: 8px; }
+
+    .pr-desglose-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 28px; }
+    .pr-desglose-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .pr-desglose-sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-bottom: 22px; }
+    .pr-row { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+    .pr-row-name { width: 190px; font-size: 14px; color: rgba(255,255,255,0.75); flex-shrink: 0; }
+    .pr-row-track { flex-grow: 1; height: 8px; background: rgba(255,255,255,0.06); border-radius: 100px; overflow: hidden; }
+    .pr-row-bar { height: 100%; background: var(--cyan); border-radius: 100px; transition: width .25s ease; }
+    .pr-row-pct { width: 70px; text-align: right; font-family: 'DM Mono', monospace; font-size: 12.5px; color: rgba(255,255,255,0.4); flex-shrink: 0; }
+    .pr-row-monto { width: 120px; text-align: right; font-size: 14.5px; font-weight: 700; flex-shrink: 0; }
+
+    .pr-otros {
+      display: flex; align-items: center; gap: 16px; padding: 14px 16px; margin-top: 6px;
+      background: rgba(29,78,216,0.1); border-radius: 12px; border: 1px solid rgba(29,78,216,0.3);
+    }
+    .pr-otros-track { flex-grow: 1; height: 8px; background: rgba(29,78,216,0.25); border-radius: 100px; overflow: hidden; }
+    .pr-otros-bar { height: 100%; background: var(--blue); border-radius: 100px; transition: width .25s ease; }
+
+    .pr-footer { display: flex; flex-direction: column; gap: 12px; padding: 20px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; }
+    .pr-footer-row { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .pr-info-btn {
+      display: flex; align-items: center; gap: 7px; background: none; border: none; padding: 8px 4px;
+      font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.4); cursor: pointer;
+    }
+    .pr-cta {
+      flex-shrink: 0; padding: 14px 26px; background: var(--blue); color: #fff; border-radius: 10px;
+      font-size: 14.5px; font-weight: 700; text-decoration: none; white-space: nowrap; border: none; cursor: pointer;
+      font-family: 'Syne', sans-serif;
+    }
+    .pr-cta:hover { background: #2563eb; }
+    .pr-info-panel {
+      display: none; padding: 14px 16px; background: rgba(255,255,255,0.03); border-radius: 10px;
+      font-family: 'DM Mono', monospace; font-size: 11.5px; color: rgba(255,255,255,0.4); line-height: 1.7;
+    }
+    .pr-info-panel.open { display: block; }
+
+    footer { padding: 32px 48px; text-align: center; font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.25); border-top: 1px solid var(--border); }
+
+    @media (max-width: 760px) {
+      .pr-content { padding: 40px 20px 64px; }
+      .pr-panel { width: 100%; }
+      nav { padding: 14px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV — reemplazar por el partial/include real del sitio si Layerix ya tiene uno -->
+<nav>
+  <a class="nav-logo" href="/">
+    <svg width="30" height="30" viewBox="0 0 600 570" fill="none">
+      <defs>
+        <linearGradient id="pr-cg" x1="0" x2="0" y1="80" y2="490" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#38d9ff"/><stop offset="0.46" stop-color="#2b86ff"/><stop offset="1" stop-color="#1d4ed8"/>
+        </linearGradient>
+        <linearGradient id="pr-tg" x1="0" x2="0" y1="90" y2="215" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#38d9ff"/><stop offset="1" stop-color="#2b86ff"/>
+        </linearGradient>
+      </defs>
+      <path fill="none" stroke="url(#pr-cg)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" d="M300 82 L492 178 L300 274 L108 178 Z"/>
+      <path fill="none" stroke="url(#pr-tg)" stroke-width="16" stroke-linecap="round" d="M300 118 L342 139M410 173 L368 152M300 230 L258 209M190 173 L232 152M300 118 L258 139M410 173 L368 194M300 230 L342 209M190 173 L232 194"/>
+      <path fill="none" stroke="url(#pr-cg)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" d="M108 178 L108 392 L300 488 L300 274M492 178 L492 392 L300 488M300 274 L300 488"/>
+      <path fill="none" stroke="url(#pr-cg)" stroke-width="16" stroke-linecap="round" d="M108 232 L300 328 L492 232M108 285 L300 381 L492 285M108 339 L300 435 L492 339"/>
+    </svg>
+    <span class="nav-logo-text"><span style="color:#fff">LAYER</span><span style="color:#38d9ff">IX</span></span>
+  </a>
+  <button class="nav-cta" onclick="trackAndGo('presupuesto_rapido_nav_cta_click', 'https://app.layerix.com.ar/?ref=presupuesto_rapido', {})">
+    Crear cuenta gratis
+  </button>
+</nav>
+
+<div class="pr-wrap">
+  <div class="pr-glow"></div>
+  <div class="pr-grid"></div>
+
+  <div class="pr-content">
+
+    <div style="display:flex; flex-direction:column; gap:16px;">
+      <div class="pr-badge"><span></span>Presupuesto rápido</div>
+      <h1 class="pr-h1">Estimá tu obra <em>en menos de un minuto</em></h1>
+      <div class="pr-sub">A partir de la tipología y la superficie — sin medir el plano.</div>
+    </div>
+
+    <div class="pr-layout">
+
+      <div class="pr-panel">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div class="pr-label">Tipología de obra</div>
+          <button class="pr-tipo-btn" type="button">Vivienda unifamiliar</button>
+          <button class="pr-tipo-btn" type="button" disabled>Oficina <span class="pr-soon">Próximamente</span></button>
+          <button class="pr-tipo-btn" type="button" disabled>Refacción baño / cocina <span class="pr-soon">Próximamente</span></button>
+        </div>
+
+        <div class="pr-hr"></div>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <label for="m2input" class="pr-label">Superficie cubierta</label>
+          <div class="pr-input-wrap">
+            <input id="m2input" type="number" min="20" max="600" step="1" value="120"/>
+            <span class="pr-unit">m²</span>
+          </div>
+        </div>
+
+        <div class="pr-tramo-box">
+          <div class="pr-tramo-lbl">Nivel detectado</div>
+          <div class="pr-tramo-val" id="tramoLabel">Media</div>
+          <div class="pr-tramo-rango" id="tramoRango">70 a 150 m² — terminación media</div>
+        </div>
+
+        <div class="pr-note">El nivel se calcula solo por tamaño y sirve como punto de partida. La medición real en el plano siempre ajusta el resultado final.</div>
+      </div>
+
+      <div class="pr-results">
+
+        <div class="pr-total-card">
+          <div>
+            <div class="pr-label">Estimación total</div>
+            <div class="pr-total-val" id="totalVal">$ 0</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="pr-label">Costo por m²</div>
+            <div class="pr-ancla-val" id="anclaVal">$ 0</div>
+          </div>
+        </div>
+
+        <div class="pr-desglose-card">
+          <div class="pr-desglose-title">Desglose estimado por rubro</div>
+          <div class="pr-desglose-sub">Basado en la incidencia típica de tus propias obras de este tipo.</div>
+
+          <div id="rowsContainer"></div>
+
+          <div class="pr-hr" style="margin: 20px 0;"></div>
+
+          <div class="pr-otros">
+            <div style="width:190px; flex-shrink:0;">
+              <div style="font-size:14px; font-weight:700;">Carpintería, instalaciones y varios</div>
+              <div style="font-family:'DM Mono',monospace; font-size:10.5px; color:#60a5fa; margin-top:2px;">ESTIMADO — FUENTE EXTERNA</div>
+            </div>
+            <div class="pr-otros-track"><div class="pr-otros-bar" id="otrosBar" style="width:0%;"></div></div>
+            <div class="pr-row-pct" style="color:#60a5fa;" id="otrosPct">0%</div>
+            <div class="pr-row-monto" id="otrosMonto">$ 0</div>
+          </div>
+        </div>
+
+        <div class="pr-footer">
+          <div class="pr-footer-row">
+            <button class="pr-info-btn" id="infoToggle" type="button">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="11"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              ¿Cómo se calculó este número?
+            </button>
+            <button class="pr-cta" id="ctaMedir" type="button">Medir este proyecto en el plano →</button>
+          </div>
+          <div class="pr-info-panel" id="infoPanel">
+            Estimación de referencia — no reemplaza el cómputo ítem por ítem. $/m²: Arquitectura &amp; Construcción, Tucumán (set-2026), ajustado con Colegio de Arquitectos de Jujuy. Incidencia por rubro: obras propias + CAPSF.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>LAYERIX — Gestión inteligente de obras</footer>
+
+<script>
+(function () {
+  // ── Datos: mismos valores que plantillas-rubros.js (vivienda_unifamiliar.presupuesto_rapido) ──
+  var TRAMOS = {
+    economica: { label: 'Económica', rango: 'Hasta 70 m² — terminación estándar', ancla: 1815612, otros: 0.255 },
+    media:     { label: 'Media',      rango: '70 a 150 m² — terminación media',    ancla: 2248436, otros: 0.255 },
+    alta_gama: { label: 'Alta gama',  rango: 'Más de 150 m² — terminación superior', ancla: 2871000, otros: 0.326 }
+  };
+  var BASE = [
+    { nombre: 'Estructura H°A°', pct: 15.85 },
+    { nombre: 'Mampostería',     pct: 9.79 },
+    { nombre: 'Revoques',        pct: 9.16 },
+    { nombre: 'Cubiertas',       pct: 8.61 },
+    { nombre: 'Pisos',           pct: 3.26 },
+    { nombre: 'Pinturas',        pct: 3.22 },
+    { nombre: 'Contrapisos',     pct: 3.19 }
+  ];
+  var BASE_TOTAL_RUBROS = 67.30;
+
+  function fmtMoney(n) { return '$ ' + Math.round(n).toLocaleString('es-AR'); }
+
+  function getTramo(m2) {
+    if (m2 <= 70) return TRAMOS.economica;
+    if (m2 <= 150) return TRAMOS.media;
+    return TRAMOS.alta_gama;
+  }
+  function getTramoId(m2) {
+    if (m2 <= 70) return 'economica';
+    if (m2 <= 150) return 'media';
+    return 'alta_gama';
+  }
+
+  // Construye las 8 filas una sola vez (7 rubros + "otros rubros menores")
+  var rowsContainer = document.getElementById('rowsContainer');
+  var topSum = BASE.reduce(function (a, r) { return a + r.pct; }, 0);
+  var restPct = BASE_TOTAL_RUBROS - topSum;
+  var ALL_ROWS = BASE.concat([{ nombre: 'Otros rubros de obra (11 ítems)', pct: restPct }]);
+  var rowEls = ALL_ROWS.map(function (r) {
+    var row = document.createElement('div');
+    row.className = 'pr-row';
+    row.innerHTML =
+      '<div class="pr-row-name">' + r.nombre + '</div>' +
+      '<div class="pr-row-track"><div class="pr-row-bar" style="width:0%"></div></div>' +
+      '<div class="pr-row-pct">0%</div>' +
+      '<div class="pr-row-monto">$ 0</div>';
+    rowsContainer.appendChild(row);
+    return {
+      bar: row.querySelector('.pr-row-bar'),
+      pct: row.querySelector('.pr-row-pct'),
+      monto: row.querySelector('.pr-row-monto'),
+      basePct: r.pct
+    };
+  });
+
+  var els = {
+    m2input: document.getElementById('m2input'),
+    tramoLabel: document.getElementById('tramoLabel'),
+    tramoRango: document.getElementById('tramoRango'),
+    totalVal: document.getElementById('totalVal'),
+    anclaVal: document.getElementById('anclaVal'),
+    otrosBar: document.getElementById('otrosBar'),
+    otrosPct: document.getElementById('otrosPct'),
+    otrosMonto: document.getElementById('otrosMonto'),
+    infoToggle: document.getElementById('infoToggle'),
+    infoPanel: document.getElementById('infoPanel'),
+    ctaMedir: document.getElementById('ctaMedir')
+  };
+
+  function render() {
+    var m2 = parseInt(els.m2input.value, 10);
+    if (isNaN(m2) || m2 <= 0) m2 = 0;
+    var tramo = getTramo(m2 || 1); // evita dividir raro con 0; el total igual da $0
+    var total = m2 * tramo.ancla;
+    var otrosMonto = total * tramo.otros;
+    var cubiertoTotal = total - otrosMonto;
+    var factor = (100 - tramo.otros * 100) / BASE_TOTAL_RUBROS;
+
+    els.tramoLabel.textContent = tramo.label;
+    els.tramoRango.textContent = tramo.rango;
+    els.totalVal.textContent = fmtMoney(total);
+    els.anclaVal.textContent = fmtMoney(tramo.ancla);
+
+    rowEls.forEach(function (r) {
+      var pctAdj = r.basePct * factor;
+      var monto = cubiertoTotal * (r.basePct / BASE_TOTAL_RUBROS);
+      r.bar.style.width = Math.min(100, pctAdj * 3.2) + '%';
+      r.pct.textContent = pctAdj.toFixed(1) + '%';
+      r.monto.textContent = fmtMoney(monto);
+    });
+
+    els.otrosBar.style.width = Math.min(100, tramo.otros * 100 * 3.2) + '%';
+    els.otrosPct.textContent = (tramo.otros * 100).toFixed(1) + '%';
+    els.otrosMonto.textContent = fmtMoney(otrosMonto);
+
+    return { m2: m2, tramoId: getTramoId(m2 || 1), total: total };
+  }
+
+  var estado = render();
+
+  // ── Tracking GA4 ──
+  // Interés real: se dispara cuando el usuario deja de tipear (debounce),
+  // no en cada tecla, para no inflar el evento.
+  var debounceTimer = null;
+  els.m2input.addEventListener('input', function () {
+    estado = render();
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function () {
+      gtag('event', 'presupuesto_rapido_interaccion', {
+        tipologia: 'vivienda',
+        m2: estado.m2,
+        tramo: estado.tramoId
+      });
+    }, 700);
+  });
+
+  els.infoToggle.addEventListener('click', function () {
+    var open = els.infoPanel.classList.toggle('open');
+    if (open) {
+      gtag('event', 'presupuesto_rapido_ver_fuente', {
+        tipologia: 'vivienda',
+        m2: estado.m2,
+        tramo: estado.tramoId
+      });
+    }
+  });
+
+  // CTA principal: el punto de conversión real. Usa trackAndGo para no
+  // perder el evento por el corte de la navegación.
+  els.ctaMedir.addEventListener('click', function () {
+    trackAndGo('presupuesto_rapido_cta_click', 'https://app.layerix.com.ar/?ref=presupuesto_rapido', {
+      tipologia: 'vivienda',
+      m2: estado.m2,
+      tramo: estado.tramoId,
+      total_estimado: estado.total
+    });
+  });
+})();
+</script>
+</body>
+</html>
