@@ -171,12 +171,20 @@
     .pr-row-pct { width: 70px; text-align: right; font-family: 'DM Mono', monospace; font-size: 12.5px; color: rgba(255,255,255,0.4); flex-shrink: 0; }
     .pr-row-monto { width: 120px; text-align: right; font-size: 14.5px; font-weight: 700; flex-shrink: 0; }
 
-    .pr-otros {
-      display: flex; align-items: center; gap: 16px; padding: 14px 16px; margin-top: 6px;
-      background: rgba(29,78,216,0.1); border-radius: 12px; border: 1px solid rgba(29,78,216,0.3);
+    .pr-group-head {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+      padding: 0 0 12px; margin-bottom: 14px; border-bottom: 1px solid var(--border);
     }
-    .pr-otros-track { flex-grow: 1; height: 8px; background: rgba(29,78,216,0.25); border-radius: 100px; overflow: hidden; }
-    .pr-otros-bar { height: 100%; background: var(--blue); border-radius: 100px; transition: width .25s ease; }
+    .pr-group-name { font-size: 14px; font-weight: 800; }
+    .pr-group-tag { font-family: 'DM Mono', monospace; font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 3px; }
+    .pr-group-sum { text-align: right; flex-shrink: 0; }
+    .pr-group-sum b { display: block; font-size: 15px; }
+    .pr-group-sum span { font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.4); }
+    .pr-group + .pr-group { margin-top: 26px; }
+    .pr-group.inst .pr-row-bar { background: #60a5fa; }
+    .pr-group.inst .pr-group-tag { color: #60a5fa; }
+    .pr-group.obra .pr-group-tag { color: var(--cyan); }
+    .pr-row { margin-bottom: 11px; }
 
     .pr-footer { display: flex; flex-direction: column; gap: 12px; padding: 20px 24px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; }
     .pr-footer-row { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; }
@@ -199,6 +207,13 @@
     footer { padding: 32px 48px; text-align: center; font-family: 'DM Mono', monospace; font-size: 12px; color: rgba(255,255,255,0.25); border-top: 1px solid var(--border); }
 
     @media (max-width: 760px) {
+      .pr-desglose-card { padding: 20px 16px; }
+      .pr-total-val { font-size: 34px; white-space: nowrap; }
+      .pr-row { gap: 10px; }
+      .pr-row-name { width: 118px; font-size: 12.5px; }
+      .pr-row-pct { width: 44px; font-size: 11px; }
+      .pr-row-monto { width: 96px; font-size: 12.5px; }
+      .pr-results { min-width: 0; }
       .pr-content { padding: 40px 20px 64px; }
       .pr-panel { width: 100%; }
       nav { padding: 14px 20px; }
@@ -287,20 +302,28 @@
 
         <div class="pr-desglose-card">
           <div class="pr-desglose-title">Desglose estimado por rubro</div>
-          <div class="pr-desglose-sub">Basado en la incidencia típica de tus propias obras de este tipo.</div>
+          <div class="pr-desglose-sub">Todos los rubros de una vivienda completa, sin equipamiento ni muebles.</div>
 
-          <div id="rowsContainer"></div>
-
-          <div class="pr-hr" style="margin: 20px 0;"></div>
-
-          <div class="pr-otros">
-            <div style="width:190px; flex-shrink:0;">
-              <div style="font-size:14px; font-weight:700;">Carpintería, instalaciones y varios</div>
-              <div style="font-family:'DM Mono',monospace; font-size:10.5px; color:#60a5fa; margin-top:2px;">ESTIMADO — FUENTE EXTERNA</div>
+          <div class="pr-group obra">
+            <div class="pr-group-head">
+              <div>
+                <div class="pr-group-name">Obra gruesa y terminaciones</div>
+                <div class="pr-group-tag">18 rubros · obras propias</div>
+              </div>
+              <div class="pr-group-sum"><b id="sumObra">$ 0</b><span id="pctObra">0%</span></div>
             </div>
-            <div class="pr-otros-track"><div class="pr-otros-bar" id="otrosBar" style="width:0%;"></div></div>
-            <div class="pr-row-pct" style="color:#60a5fa;" id="otrosPct">0%</div>
-            <div class="pr-row-monto" id="otrosMonto">$ 0</div>
+            <div id="rowsObra"></div>
+          </div>
+
+          <div class="pr-group inst">
+            <div class="pr-group-head">
+              <div>
+                <div class="pr-group-name">Carpinterías e instalaciones</div>
+                <div class="pr-group-tag">5 rubros · CAPSF jul-2026</div>
+              </div>
+              <div class="pr-group-sum"><b id="sumInst">$ 0</b><span id="pctInst">0%</span></div>
+            </div>
+            <div id="rowsInst"></div>
           </div>
         </div>
 
@@ -313,7 +336,7 @@
             <button class="pr-cta" id="ctaMedir" type="button">Medir este proyecto en el plano →</button>
           </div>
           <div class="pr-info-panel" id="infoPanel">
-            Estimación de referencia — no reemplaza el cómputo ítem por ítem. $/m²: Arquitectura &amp; Construcción, Tucumán (set-2026), ajustado con Colegio de Arquitectos de Jujuy. Incidencia por rubro: obras propias + CAPSF.
+            Estimación de referencia — no reemplaza el cómputo ítem por ítem. $/m²: Arquitectura &amp; Construcción, Tucumán (set-2026), ajustado con Colegio de Arquitectos de Jujuy. Incidencia por rubro: obra gruesa y terminaciones según presupuestos de obras propias; carpinterías, instalaciones (eléctrica, sanitaria, gas) y varios según las planillas del Colegio de Arquitectos de Santa Fe (CAPSF, jul-2026) para el modelo de vivienda de cada tamaño. No incluye equipamiento, muebles, calefacción ni aire acondicionado.
           </div>
         </div>
 
@@ -327,56 +350,70 @@
 <script>
 (function () {
   // ── Datos: mismos valores que plantillas-rubros.js (vivienda_unifamiliar.presupuesto_rapido) ──
+  // desglose_otros: % sobre el TOTAL de obra, de las planillas CAPSF jul-2026 de cada modelo
+  // (Mod.10 55m², Mod.1 100m², Mod.9 345m²). Suman exactamente "otros".
   var TRAMOS = {
-    economica: { label: 'Económica', rango: 'Hasta 70 m² — terminación estándar', ancla: 1815612, otros: 0.255 },
-    media:     { label: 'Media',      rango: '70 a 150 m² — terminación media',    ancla: 2248436, otros: 0.255 },
-    alta_gama: { label: 'Alta gama',  rango: 'Más de 150 m² — terminación superior', ancla: 2871000, otros: 0.326 }
+    economica: { label: 'Económica', rango: 'Hasta 70 m² — terminación estándar', ancla: 1815612, otros: 0.255,
+      desglose: { carp: 8.95, elec: 6.96, san: 5.66, gas: 2.93, var: 0.98 } },
+    media:     { label: 'Media',      rango: '70 a 150 m² — terminación media',    ancla: 2248436, otros: 0.255,
+      desglose: { carp: 11.44, elec: 4.67, san: 6.34, gas: 2.34, var: 0.72 } },
+    alta_gama: { label: 'Alta gama',  rango: 'Más de 150 m² — terminación superior', ancla: 2871000, otros: 0.326,
+      desglose: { carp: 11.07, elec: 4.08, san: 5.30, gas: 2.74, var: 9.40 } }
   };
-  var BASE = [
-    { nombre: 'Estructura H°A°', pct: 15.85 },
-    { nombre: 'Mampostería',     pct: 9.79 },
-    { nombre: 'Revoques',        pct: 9.16 },
-    { nombre: 'Cubiertas',       pct: 8.61 },
-    { nombre: 'Pisos',           pct: 3.26 },
-    { nombre: 'Pinturas',        pct: 3.22 },
-    { nombre: 'Contrapisos',     pct: 3.19 }
+  // Obra gruesa y terminaciones: incidencia real de obras propias (sobre el total), en orden de obra.
+  var OBRA = [
+    { nombre: 'Trabajos preparatorios', pct: 1.72 },
+    { nombre: 'Movimiento de tierra',   pct: 1.82 },
+    { nombre: 'Cimientos',              pct: 0.30 },
+    { nombre: 'Estructura H°A°',        pct: 15.85 },
+    { nombre: 'Mampostería',            pct: 9.79 },
+    { nombre: 'Tabiques en seco',       pct: 0.19 },
+    { nombre: 'Capa aisladora',         pct: 0.43 },
+    { nombre: 'Revoques',               pct: 9.16 },
+    { nombre: 'Contrapisos',            pct: 3.19 },
+    { nombre: 'Revestimientos',         pct: 1.26 },
+    { nombre: 'Cielorrasos',            pct: 2.32 },
+    { nombre: 'Pisos',                  pct: 3.26 },
+    { nombre: 'Zócalos y umbrales',     pct: 1.07 },
+    { nombre: 'Aislaciones',            pct: 1.56 },
+    { nombre: 'Cubiertas',              pct: 8.61 },
+    { nombre: 'Pinturas',               pct: 3.22 },
+    { nombre: 'Vidrios',                pct: 3.18 },
+    { nombre: 'Antepechos',             pct: 0.37 }
   ];
-  var BASE_TOTAL_RUBROS = 67.30;
+  var OBRA_TOTAL = OBRA.reduce(function (a, r) { return a + r.pct; }, 0); // 67,30
+  var INST = [
+    { key: 'carp', nombre: 'Carpinterías' },
+    { key: 'elec', nombre: 'Instalación eléctrica' },
+    { key: 'san',  nombre: 'Instalación sanitaria' },
+    { key: 'gas',  nombre: 'Instalación de gas' },
+    { key: 'var',  nombre: 'Varios' }
+  ];
 
   function fmtMoney(n) { return '$ ' + Math.round(n).toLocaleString('es-AR'); }
+  function fmtPct(n) { return n.toFixed(1).replace('.', ',') + '%'; }
 
-  function getTramo(m2) {
-    if (m2 <= 70) return TRAMOS.economica;
-    if (m2 <= 150) return TRAMOS.media;
-    return TRAMOS.alta_gama;
-  }
   function getTramoId(m2) {
     if (m2 <= 70) return 'economica';
     if (m2 <= 150) return 'media';
     return 'alta_gama';
   }
 
-  // Construye las 8 filas una sola vez (7 rubros + "otros rubros menores")
-  var rowsContainer = document.getElementById('rowsContainer');
-  var topSum = BASE.reduce(function (a, r) { return a + r.pct; }, 0);
-  var restPct = BASE_TOTAL_RUBROS - topSum;
-  var ALL_ROWS = BASE.concat([{ nombre: 'Otros rubros de obra (11 ítems)', pct: restPct }]);
-  var rowEls = ALL_ROWS.map(function (r) {
-    var row = document.createElement('div');
-    row.className = 'pr-row';
-    row.innerHTML =
-      '<div class="pr-row-name">' + r.nombre + '</div>' +
-      '<div class="pr-row-track"><div class="pr-row-bar" style="width:0%"></div></div>' +
-      '<div class="pr-row-pct">0%</div>' +
-      '<div class="pr-row-monto">$ 0</div>';
-    rowsContainer.appendChild(row);
-    return {
-      bar: row.querySelector('.pr-row-bar'),
-      pct: row.querySelector('.pr-row-pct'),
-      monto: row.querySelector('.pr-row-monto'),
-      basePct: r.pct
-    };
-  });
+  function buildRows(container, list) {
+    return list.map(function (r) {
+      var row = document.createElement('div');
+      row.className = 'pr-row';
+      row.innerHTML =
+        '<div class="pr-row-name">' + r.nombre + '</div>' +
+        '<div class="pr-row-track"><div class="pr-row-bar" style="width:0%"></div></div>' +
+        '<div class="pr-row-pct">0%</div>' +
+        '<div class="pr-row-monto">$ 0</div>';
+      container.appendChild(row);
+      return { src: r, bar: row.querySelector('.pr-row-bar'), pct: row.querySelector('.pr-row-pct'), monto: row.querySelector('.pr-row-monto') };
+    });
+  }
+  var rowsObra = buildRows(document.getElementById('rowsObra'), OBRA);
+  var rowsInst = buildRows(document.getElementById('rowsInst'), INST);
 
   var els = {
     m2input: document.getElementById('m2input'),
@@ -384,9 +421,10 @@
     tramoRango: document.getElementById('tramoRango'),
     totalVal: document.getElementById('totalVal'),
     anclaVal: document.getElementById('anclaVal'),
-    otrosBar: document.getElementById('otrosBar'),
-    otrosPct: document.getElementById('otrosPct'),
-    otrosMonto: document.getElementById('otrosMonto'),
+    sumObra: document.getElementById('sumObra'),
+    pctObra: document.getElementById('pctObra'),
+    sumInst: document.getElementById('sumInst'),
+    pctInst: document.getElementById('pctInst'),
     infoToggle: document.getElementById('infoToggle'),
     infoPanel: document.getElementById('infoPanel'),
     ctaMedir: document.getElementById('ctaMedir')
@@ -395,30 +433,35 @@
   function render() {
     var m2 = parseInt(els.m2input.value, 10);
     if (isNaN(m2) || m2 <= 0) m2 = 0;
-    var tramo = getTramo(m2 || 1); // evita dividir raro con 0; el total igual da $0
+    var tramoId = getTramoId(m2 || 1);
+    var tramo = TRAMOS[tramoId];
     var total = m2 * tramo.ancla;
-    var otrosMonto = total * tramo.otros;
-    var cubiertoTotal = total - otrosMonto;
-    var factor = (100 - tramo.otros * 100) / BASE_TOTAL_RUBROS;
+    var pctInstTotal = tramo.otros * 100;
+    var pctObraTotal = 100 - pctInstTotal;
+
+    // % finales de cada fila (suman 100 entre los dos grupos)
+    var filas = [];
+    rowsObra.forEach(function (r) { filas.push({ r: r, pct: r.src.pct * pctObraTotal / OBRA_TOTAL }); });
+    var dsum = INST.reduce(function (a, it) { return a + tramo.desglose[it.key]; }, 0);
+    rowsInst.forEach(function (r) { filas.push({ r: r, pct: tramo.desglose[r.src.key] * pctInstTotal / dsum }); });
+    var maxPct = filas.reduce(function (a, f) { return Math.max(a, f.pct); }, 0) || 1;
+
+    filas.forEach(function (f) {
+      f.r.bar.style.width = (f.pct / maxPct * 100) + '%';
+      f.r.pct.textContent = fmtPct(f.pct);
+      f.r.monto.textContent = fmtMoney(total * f.pct / 100);
+    });
 
     els.tramoLabel.textContent = tramo.label;
     els.tramoRango.textContent = tramo.rango;
     els.totalVal.textContent = fmtMoney(total);
     els.anclaVal.textContent = fmtMoney(tramo.ancla);
+    els.sumObra.textContent = fmtMoney(total * pctObraTotal / 100);
+    els.pctObra.textContent = fmtPct(pctObraTotal);
+    els.sumInst.textContent = fmtMoney(total * pctInstTotal / 100);
+    els.pctInst.textContent = fmtPct(pctInstTotal);
 
-    rowEls.forEach(function (r) {
-      var pctAdj = r.basePct * factor;
-      var monto = cubiertoTotal * (r.basePct / BASE_TOTAL_RUBROS);
-      r.bar.style.width = Math.min(100, pctAdj * 3.2) + '%';
-      r.pct.textContent = pctAdj.toFixed(1) + '%';
-      r.monto.textContent = fmtMoney(monto);
-    });
-
-    els.otrosBar.style.width = Math.min(100, tramo.otros * 100 * 3.2) + '%';
-    els.otrosPct.textContent = (tramo.otros * 100).toFixed(1) + '%';
-    els.otrosMonto.textContent = fmtMoney(otrosMonto);
-
-    return { m2: m2, tramoId: getTramoId(m2 || 1), total: total };
+    return { m2: m2, tramoId: tramoId, total: total };
   }
 
   var estado = render();
