@@ -404,6 +404,26 @@
     .footer-links a:hover { color:rgba(255,255,255,0.7); }
     .footer-copy { font-size:12px; color:rgba(255,255,255,0.25); font-family:'DM Mono',monospace; }
 
+    /* ===== EN DESARROLLO ===== */
+    .soon-row { display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-top:36px; }
+    .soon-label { font-family:'DM Mono',monospace; font-size:11px; color:rgba(255,255,255,0.4); letter-spacing:0.12em; text-transform:uppercase; margin-right:6px; }
+    .soon-chip { font-size:13px; color:rgba(255,255,255,0.6); border:1px dashed rgba(255,255,255,0.2); border-radius:20px; padding:6px 14px; }
+    .feature-card.highlight { border-color:rgba(56,217,255,0.35); background: linear-gradient(135deg, rgba(56,217,255,0.07), var(--card) 60%); }
+
+    /* ===== QUIEN ESTA DETRAS ===== */
+    .about { padding:90px 48px; border-top:1px solid var(--border); background:rgba(255,255,255,0.01); }
+    .about-inner { max-width:760px; margin:0 auto; text-align:center; }
+    .about-text { font-size:17px; color:rgba(255,255,255,0.6); line-height:1.75; margin-bottom:26px; }
+    .about-chips { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:32px; }
+    .about-chip { font-family:'DM Mono',monospace; font-size:12px; color:var(--cyan); border:1px solid rgba(56,217,255,0.25); background:rgba(56,217,255,0.06); padding:7px 14px; border-radius:20px; }
+
+    /* ===== CREDITOS ===== */
+    .credit-steps { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:16px; }
+    .credit-step { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:20px; }
+    .credit-step-n { font-family:'DM Mono',monospace; font-size:12px; color:var(--cyan); margin-bottom:8px; }
+    .credit-step-t { font-size:15px; font-weight:700; margin-bottom:6px; }
+    .credit-step-d { font-size:13px; color:rgba(255,255,255,0.55); line-height:1.6; }
+
     /* ===== RESPONSIVE ===== */
     @media(max-width:768px){
       nav { padding:16px 20px; }
@@ -422,6 +442,8 @@
       .plans-grid { grid-template-columns:1fr; }
       .cta-section { padding:60px 20px; }
       footer { padding:32px 20px; flex-direction:column; }
+      .about { padding:60px 20px; }
+      .nav-links.open { display:flex; flex-direction:column; align-items:flex-start; position:absolute; top:100%; left:0; right:0; padding:20px; gap:18px; background:rgba(10,12,16,0.97); border-bottom:1px solid var(--border); }
     }
   </style>
 </head>
@@ -453,7 +475,7 @@
     <a href="#contacto">Contacto</a>
     <a href="https://app.layerix.com.ar" class="nav-cta">Ingresar →</a>
   </div>
-  <div class="nav-menu"><span/><span/><span/></div>
+  <div class="nav-menu" id="navMenu" role="button" tabindex="0" aria-label="Abrir menú"><span></span><span></span><span></span></div>
 </nav>
 
 <!-- HERO -->
@@ -815,9 +837,9 @@
 
 <!-- STATS -->
 <div class="stats">
-  <div class="stat"><div class="stat-val">10+</div><div class="stat-lbl">Proyectos en plan Pro</div></div>
+  <div class="stat"><div class="stat-val">360+</div><div class="stat-lbl">Rubros del catálogo FAU-UNT 2012, auditados</div></div>
+  <div class="stat"><div class="stat-val">290+</div><div class="stat-lbl">Materiales con precio de referencia</div></div>
   <div class="stat"><div class="stat-val">100%</div><div class="stat-lbl">Online, sin instalar nada</div></div>
-  <div class="stat"><div class="stat-val">IA</div><div class="stat-lbl">Cómputo automático</div></div>
   <div class="stat"><div class="stat-val">ARG</div><div class="stat-lbl">Hecho en Jujuy 🇦🇷</div></div>
 </div>
 
@@ -827,36 +849,53 @@
   <h2 class="section-title">Todo lo que necesitás<br/>en una sola plataforma</h2>
   <p class="section-sub">Desde la primera medición hasta el último certificado, Layerix te acompaña en cada etapa de la obra.</p>
   <div class="features-grid">
+    <div class="feature-card highlight">
+      <div class="feature-icon" style="background:rgba(56,217,255,0.12);color:#38d9ff"><i data-lucide="layers" width="22" height="22"></i></div>
+      <div class="feature-title">Medís una vez, Layerix hace el resto</div>
+      <div class="feature-desc">Dibujás un local o un muro una sola vez y salen contrapiso, carpeta, piso, revoques, pintura y zócalos, cada uno con su cómputo. Sin redibujar el mismo ambiente para cada ítem.</div>
+    </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:rgba(56,217,255,0.1);color:#38d9ff"><i data-lucide="ruler" width="22" height="22"></i></div>
       <div class="feature-title">Medición y cómputo</div>
-      <div class="feature-desc">Medí por área, línea o conteo. El sistema calcula automáticamente cantidades y genera el cómputo métrico de la obra.</div>
+      <div class="feature-desc">Medí por área, línea o conteo directo sobre tu plano. ¿Planta tipo repetida? Medís un piso y lo multiplicás por la cantidad de pisos.</div>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:rgba(29,78,216,0.15);color:#60a5fa"><i data-lucide="wallet" width="22" height="22"></i></div>
-      <div class="feature-title">Presupuesto automático</div>
-      <div class="feature-desc">Desde el cómputo al presupuesto en un clic. Con gastos generales, beneficio, IVA e IIBB configurables.</div>
+      <div class="feature-title">Presupuesto con análisis de precios</div>
+      <div class="feature-desc">Del cómputo al presupuesto en un clic, con gastos generales, beneficio, IVA e IIBB configurables. Desplegá cualquier ítem y mirá de dónde sale su precio: mano de obra, materiales y rendimiento.</div>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:rgba(56,217,255,0.08);color:#38d9ff"><i data-lucide="clipboard-list" width="22" height="22"></i></div>
       <div class="feature-title">Plan de trabajo</div>
-      <div class="feature-desc">Planificá el avance de obra por períodos — semanas o meses — con distribución porcentual automática.</div>
+      <div class="feature-desc">Planificá el avance por semanas o meses con distribución automática, Curva S y banda de control de ±20%.</div>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:rgba(63,185,80,0.12);color:#3fb950"><i data-lucide="file-check-2" width="22" height="22"></i></div>
       <div class="feature-title">Certificaciones</div>
-      <div class="feature-desc">Emití certificados de avance de obra con cálculo automático de montos, acumulados y avance porcentual.</div>
+      <div class="feature-desc">Certificados de avance con acumulados, recupero de anticipo y una alerta que te avisa si cargás más avance del que corresponde.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:rgba(96,165,250,0.12);color:#60a5fa"><i data-lucide="bar-chart-3" width="22" height="22"></i></div>
+      <div class="feature-title">Reporte Ejecutivo</div>
+      <div class="feature-desc">Dashboard con curva Pareto ABC, simulador de precios y desglose de materiales y mano de obra. Compartilo con un link que vence cuando vos decidas.</div>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:rgba(249,115,22,0.12);color:#f97316"><i data-lucide="handshake" width="22" height="22"></i></div>
       <div class="feature-title">Modo colaborativo</div>
-      <div class="feature-desc">Trabajá en equipo en tiempo real. Cada colega toma un rubro y avanzan juntos sin pisarse. <span style="color:rgba(255,255,255,0.3)">Próximamente</span></div>
+      <div class="feature-desc">Trabajá en equipo en tiempo real: cada colega toma un rubro y avanzan juntos sin pisarse. Invitás por link.</div>
     </div>
     <div class="feature-card">
       <div class="feature-icon" style="background:rgba(167,139,250,0.12);color:#a78bfa"><i data-lucide="bot" width="22" height="22"></i></div>
-      <div class="feature-title">Cómputo con IA</div>
-      <div class="feature-desc">Subí el plano y la IA detecta automáticamente los rubros y genera el cómputo. <span style="color:rgba(255,255,255,0.3)">Próximamente</span></div>
+      <div class="feature-title">Asistente IA</div>
+      <div class="feature-desc">La IA clasifica tu obra y arma el checklist de rubros típicos. Las cantidades salen de tu medición y de motores de cálculo propios: la IA propone, no inventa números.</div>
     </div>
+  </div>
+
+  <div class="soon-row">
+    <span class="soon-label">// En desarrollo</span>
+    <span class="soon-chip">Lectura de planos con IA</span>
+    <span class="soon-chip">Instalaciones eléctricas en el plano</span>
+    <span class="soon-chip">Redeterminaciones de precios</span>
   </div>
 </section>
 
@@ -935,7 +974,7 @@ document.addEventListener('keydown',function(e){
     <!-- Botón siempre visible debajo del mockup -->
   <div class="app-mockup">
     <div class="mockup-bar">
-      <div class="mockup-dots"><span/><span/><span/></div>
+      <div class="mockup-dots"><span></span><span></span><span></span></div>
       <div class="mockup-url">layerix.com.ar/app</div>
     </div>
     <div class="mockup-body">
@@ -1026,6 +1065,21 @@ document.addEventListener('keydown',function(e){
 
 </section>
 
+<!-- QUIEN ESTA DETRAS -->
+<section class="about" id="nosotros">
+  <div class="about-inner">
+    <div class="section-label">// Quién está detrás</div>
+    <h2 class="section-title">Hecho por un arquitecto,<br/>para quienes presupuestan obra</h2>
+    <p class="about-text">Soy Rafa Quiroga. Armé Layerix porque estaba cansado de hacer cómputos y presupuestos a mano en planillas. Hoy lo uso en mis propios proyectos y lo sigo mejorando con lo que me cuentan otros colegas.</p>
+    <div class="about-chips">
+      <span class="about-chip">Arquitecto · FAU-UNT</span>
+      <span class="about-chip">Maestro Mayor de Obras</span>
+      <span class="about-chip">+15 años en construcción</span>
+    </div>
+    <a href="https://wa.me/5493884143442" class="btn-secondary" style="display:inline-flex;align-items:center;gap:7px;"><i data-lucide="message-circle" width="16" height="16"></i>Escribime por WhatsApp</a>
+  </div>
+</section>
+
 <!-- PLANES -->
 <section class="section" id="planes">
   <div style="text-align:center;margin-bottom:60px;">
@@ -1072,6 +1126,7 @@ document.addEventListener('keydown',function(e){
         <li>Hasta 10 proyectos activos</li>
         <li>Control de avance de obra</li>
         <li>Emisión de certificados</li>
+        <li>Modo colaborativo en tiempo real</li>
         <li>Exportaciones ilimitadas (PDF y Excel)</li>
         <li>Logo de empresa en documentos</li>
         <li>1 crédito de IA incluido por mes</li>
@@ -1084,11 +1139,11 @@ document.addEventListener('keydown',function(e){
     <div class="plan-card">
       <div class="plan-name">IA</div>
       <div class="plan-price">USD 25<span>/mes</span></div>
-      <div class="plan-desc">Para estudios que quieren automatizar el cómputo con inteligencia artificial.</div>
+      <div class="plan-desc">Para estudios que quieren armar sus presupuestos con ayuda de inteligencia artificial.</div>
       <ul class="plan-features">
         <li>Todo lo incluido en el plan Pro</li>
         <li>Hasta 20 proyectos activos</li>
-        <li>20 créditos de cómputo automático por IA/mes <a href="#que-es-credito" style="color:#38d9ff;font-size:11px;">¿Qué es un crédito?</a></li>
+        <li>20 créditos de asistente IA por mes <a href="#que-es-credito" style="color:#38d9ff;font-size:11px;">¿Qué es un crédito?</a></li>
         <li>Posibilidad de comprar créditos IA adicionales</li>
       </ul>
       <a href="https://app.layerix.com.ar" class="plan-btn outline" onclick="event.preventDefault();trackAndGo('click_activar_ia','https://app.layerix.com.ar',{plan:'ia'})">Activar IA</a>
@@ -1101,7 +1156,7 @@ document.addEventListener('keydown',function(e){
       <div class="plan-desc">Recargá créditos IA cuando los necesités, sin cambiar de plan.</div>
       <ul class="plan-features">
         <li>Disponible para planes Pro e IA</li>
-        <li>10 créditos adicionales de cómputo por IA</li>
+        <li>10 créditos adicionales de asistente IA</li>
         <li>Créditos acumulables, no vencen</li>
       </ul>
       <a href="https://app.layerix.com.ar" class="plan-btn outline" style="border-color:rgba(167,139,250,0.3);color:rgba(167,139,250,0.9)" onclick="event.preventDefault();trackAndGo('click_comprar_creditos','https://app.layerix.com.ar',{plan:'creditos_extra'})">Comprar créditos</a>
@@ -1116,34 +1171,15 @@ document.addEventListener('keydown',function(e){
 
 </section>
 
-</section>
-
 <!-- QUÉ ES UN CRÉDITO -->
+<!-- VALIDAR RAFA: definición de crédito = 1 clasificación con IA (checklist de rubros). Confirmar que coincide con lo que consume la app. -->
 <section style="max-width:760px;margin:0 auto;padding:60px 24px;" id="que-es-credito">
   <h2 style="color:#fff;font-size:22px;margin-bottom:8px;">¿Qué es un crédito IA?</h2>
-  <p style="color:#aaa;margin-bottom:24px;">1 crédito = 1 plano de planta o nivel subido para análisis automático (PDF/DWG/DXF, máximo hoja A0 o 500 m²).</p>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-    <div style="background:#111318;border:1px solid #1e2330;border-radius:12px;padding:20px;">
-      <div style="color:#38d9ff;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;"><i data-lucide="building-2" width="16" height="16"></i>Hotel de 8 pisos</div>
-      <ul style="color:#ccc;font-size:14px;padding-left:18px;line-height:2;">
-        <li>Subsuelo = 1 crédito</li>
-        <li>Planta Baja = 1 crédito</li>
-        <li>Entrepiso 1 = 1 crédito</li>
-        <li>Entrepiso 2 = 1 crédito</li>
-        <li>Planta Tipo = 1 crédito</li>
-        <li>Planta Suites = 1 crédito</li>
-        <li>Terraza = 1 crédito</li>
-      </ul>
-      <div style="color:#38d9ff;font-weight:700;margin-top:12px;">Total: 7 créditos</div>
-    </div>
-    <div style="background:#111318;border:1px solid #1e2330;border-radius:12px;padding:20px;">
-      <div style="color:#38d9ff;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px;"><i data-lucide="home" width="16" height="16"></i>Vivienda unifamiliar</div>
-      <ul style="color:#ccc;font-size:14px;padding-left:18px;line-height:2;">
-        <li>Planta Baja = 1 crédito</li>
-        <li>Planta Alta = 1 crédito</li>
-      </ul>
-      <div style="color:#38d9ff;font-weight:700;margin-top:12px;">Total: 2 créditos</div>
-    </div>
+  <p style="color:#aaa;margin-bottom:24px;line-height:1.7;">1 crédito = 1 uso del asistente IA: la IA clasifica tu obra y te arma el checklist de rubros típicos. Todo lo demás (filtrar, ajustar, medir y presupuestar) no consume créditos.</p>
+  <div class="credit-steps">
+    <div class="credit-step"><div class="credit-step-n">01</div><div class="credit-step-t">Cargás tu proyecto</div><div class="credit-step-d">Con los datos de tu obra.</div></div>
+    <div class="credit-step"><div class="credit-step-n">02</div><div class="credit-step-t">La IA lo clasifica</div><div class="credit-step-d">Arma el checklist de rubros típicos de ese tipo de obra. Consume 1 crédito.</div></div>
+    <div class="credit-step"><div class="credit-step-n">03</div><div class="credit-step-t">Vos decidís</div><div class="credit-step-d">Filtrás, ajustás y medís. Las cantidades salen de tu medición, no de la IA. Sin costo.</div></div>
   </div>
 </section>
 
@@ -1208,6 +1244,17 @@ document.addEventListener('keydown',function(e){
   root.addEventListener('mouseenter',stop); root.addEventListener('mouseleave',start);
   document.addEventListener('visibilitychange',function(){ document.hidden?stop():start(); });
   setPlaying(playing);
+})();
+</script>
+<script>
+/* ===== Menú móvil ===== */
+(function(){
+  var b=document.getElementById('navMenu'), l=document.querySelector('.nav-links');
+  if(!b||!l) return;
+  function t(){ l.classList.toggle('open'); }
+  b.addEventListener('click',t);
+  b.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); t(); } });
+  l.addEventListener('click',function(e){ if(e.target.closest('a')) l.classList.remove('open'); });
 })();
 </script>
 <script>lucide.createIcons();</script>
